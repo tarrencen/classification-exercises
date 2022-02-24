@@ -38,7 +38,7 @@ def get_iris_data():
     query = '''
     SELECT * 
     FROM measurements m
-    JOIN species_id s ON m.species_id = s.species_id
+    JOIN species s ON m.species_id = s.species_id
     '''
     print('Getting a fresh copy from SQL db...')
     df = pd.read_sql(query, url)
@@ -60,7 +60,7 @@ def get_telco_data():
     FROM customers c
     JOIN contract_types ct ON c.contract_type_id = ct.contract_type_id
     JOIN payment_types pt ON c.payment_type_id = pt.payment_type_id
-    JOIN internet_service_type ist ON c.internet_service_type_id = ist.internet_service_type_id'''
+    JOIN internet_service_types ist ON c.internet_service_type_id = ist.internet_service_type_id'''
     print('Getting a fresh copy from SQL db...')
     df = pd.read_sql(query, url)
     print('Saving to CSV...')
