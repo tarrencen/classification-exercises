@@ -66,3 +66,18 @@ def get_telco_data():
     print('Saving to CSV...')
     df.to_csv(filename, index=False)
     return df
+
+    def get_titanic_data():
+        filename = 'titanic.csv'
+
+        if os.path.exists(filename):
+            print('Reading from CSV file...')
+            return pd.read_csv(filename)
+        
+        url = get_db_url('titanic_db')
+        query = 'SELECT * FROM passengers'
+        print('Getting a fresh copy from SQL db...')
+        df = pd.read_sql(query, url)
+        print('Saving to CSV...')
+        df.to_csv(filename, index=False)
+        return df
