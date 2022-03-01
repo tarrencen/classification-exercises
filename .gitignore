@@ -3,3 +3,7 @@ env.py
 __pycache__/
 .DS_Store
 .ipynb_checkpoints/
+tidy_data_lesson.ipynb
+untidy-data.zip
+untidy-data/
+*.xlsx
