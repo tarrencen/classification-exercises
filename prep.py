@@ -38,3 +38,22 @@ def prep_titanic(titanic_df):
     titanic_df_clean = titanic_df.drop(columns= ['sex', 'embark_town'])
     return titanic_df_clean
 
+def titanic_train_validate_test(titanic_df_clean):
+    '''
+    Takes in a pandas DataFrame of the Titanic dataset as acquired and returns train, validate, and test 
+    splits of the DF
+    Args: titanic_df, pandas DF with expected columns and feature names
+    Return: train, validate, and test splits of titanic_df
+    '''
+    titanic_df_clean = acq.prep_titanic()
+    train, test = train_test_split(
+        titanic_df,
+        train_size = 0.8,
+        stratify= titanic_df.survived
+        random_state= 302)
+    train, validate = train_test_split(
+        train,
+        train_size = 0.7,
+        stratify= train.survived
+        random_state= 302)
+    return train, validate, test
