@@ -25,9 +25,9 @@ def prep_iris(iris_df):
 
 def prep_titanic(titanic_df):
     '''
-    Takes in a pandas DataFrame of the Titanic dataset as acquired and returns a cleaned version of the DF
+    Takes in a pandas DataFrame of the Titanic dataset as acquired and returns a cleaned version of the DF, and train, validate, and test splits
     Args: titanic_df, pandas DF with expected columns and feature names
-    Return: titanic_df_clean, pandas DF with cleaning operations performed
+    Return: titanic_df_clean and splits of it (train, validate, and test) 
     '''
     titanic_df = acq.get_titanic_data()
     titanic_df = titanic_df.drop_duplicates()
@@ -36,24 +36,27 @@ def prep_titanic(titanic_df):
     titanic_dummy_df = pd.get_dummies(titanic_df[['sex', 'embark_town']], dummy_na=False, drop_first= [True, True])
     titanic_df = pd.concat([titanic_df, titanic_dummy_df], axis=1)
     titanic_df_clean = titanic_df.drop(columns= ['sex', 'embark_town'])
-    return titanic_df_clean
+    train, test = train_test_split(titanic_df_clean, train_size = 0.8, stratify= titanic_df_clean.survived,
+        random_state= 302)
+    train, validate = train_test_split(train, train_size = 0.7, stratify= train.survived, random_state= 302)
+    return titanic_df_clean, train, validate, test
 
-def titanic_train_validate_test(titanic_df_clean):
+
+def prep_telco(telco_df):
     '''
-    Takes in a pandas DataFrame of the Titanic dataset as acquired and returns train, validate, and test 
-    splits of the DF
-    Args: titanic_df, pandas DF with expected columns and feature names
-    Return: train, validate, and test splits of titanic_df
+    Takes in a pandas DataFrame of Telco data and returns a clean and prepped DF (telco_df_clean)
     '''
-    titanic_df_clean = acq.prep_titanic()
-    train, test = train_test_split(
-        titanic_df,
-        train_size = 0.8,
-        stratify= titanic_df.survived
-        random_state= 302)
-    train, validate = train_test_split(
-        train,
-        train_size = 0.7,
-        stratify= train.survived
-        random_state= 302)
-    return train, validate, test
+    
+    telco_df = telco_df.drop_duplicates()
+    telco_df = telco_df.drop(columns= ['contract_type_id.1', 'payment_type_id.1', 'internet_service_type_id.1'])
+    telco_df.total_charges = telco_df.total_charges.replace(' ', np.nan).astype(float)
+    telco_df = telco_df.dropna()
+    cat_cols = [col for col in telco_df.columns if telco_df[col].dtype == 'O']
+    telco_cats = list(telco_df[cat_cols].columns)
+    telco_cats = telco_cats[1:]
+    telco_dummies = pd.get_dummies(telco_df[telco_cats], dummy_na=False, drop_first=True)
+    telco_df_clean = pd.concat([telco_df, telco_dummies], axis=1)
+    return telco_df_clean
+    
+
+
