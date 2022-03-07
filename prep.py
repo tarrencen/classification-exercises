@@ -36,15 +36,16 @@ def prep_titanic(titanic_df):
     titanic_dummy_df = pd.get_dummies(titanic_df[['sex', 'embark_town']], dummy_na=False, drop_first= [True, True])
     titanic_df = pd.concat([titanic_df, titanic_dummy_df], axis=1)
     titanic_df_clean = titanic_df.drop(columns= ['sex', 'embark_town'])
-    train, test = train_test_split(titanic_df_clean, train_size = 0.8, stratify= titanic_df_clean.survived,
+    titanic_train, titanic_test = train_test_split(titanic_df_clean, train_size = 0.8, stratify= titanic_df_clean.survived,
         random_state= 302)
-    train, validate = train_test_split(train, train_size = 0.7, stratify= train.survived, random_state= 302)
-    return titanic_df_clean, train, validate, test
+    titanic_train, titanic_validate = train_test_split(titanic_train, train_size = 0.7, stratify= titanic_train.survived, random_state= 302)
+    return titanic_df_clean, titanic_train, titanic_validate, titanic_test
 
 
 def prep_telco(telco_df):
     '''
-    Takes in a pandas DataFrame of Telco data and returns a clean and prepped DF (telco_df_clean)
+    Takes in a pandas DataFrame of Telco data and returns a clean and prepped DF (telco_df_clean) along with train, 
+    validate, and test splits
     '''
     
     telco_df = telco_df.drop_duplicates()
@@ -56,9 +57,9 @@ def prep_telco(telco_df):
     telco_cats = telco_cats[1:]
     telco_dummies = pd.get_dummies(telco_df[telco_cats], dummy_na=False, drop_first=True)
     telco_df_clean = pd.concat([telco_df, telco_dummies], axis=1)
-    train, test = train_test_split(telco_df_clean, train_size = 0.8, stratify= telco_df_clean.churn, random_state= 302)
-    train, validate =  train_test_split(train, train_size= 0.7, stratify= train.churn, random_state= 302)
-    return telco_df_clean, train, validate, test
+    telco_train, telco_test = train_test_split(telco_df_clean, train_size = 0.8, stratify= telco_df_clean.churn, random_state= 302)
+    telco_train, telco_validate =  train_test_split(telco_train, train_size= 0.7, stratify= telco_train.churn, random_state= 302)
+    return telco_df_clean, telco_train, telco_validate, telco_test
     
 
 
