@@ -57,8 +57,8 @@ def prep_telco(telco_df):
     telco_cats = telco_cats[1:]
     telco_dummies = pd.get_dummies(telco_df[telco_cats], dummy_na=False, drop_first=True)
     telco_df_clean = pd.concat([telco_df, telco_dummies], axis=1)
-    telco_train, telco_test = train_test_split(telco_df_clean, train_size = 0.8, stratify= telco_df_clean.churn, random_state= 302)
-    telco_train, telco_validate =  train_test_split(telco_train, train_size= 0.7, stratify= telco_train.churn, random_state= 302)
+    telco_train, telco_test = train_test_split(telco_df_clean, train_size = 0.8, stratify= telco_df_clean.churn_Yes, random_state= 302)
+    telco_train, telco_validate =  train_test_split(telco_train, train_size= 0.7, stratify= telco_train.churn_Yes, random_state= 302)
     return telco_df_clean, telco_train, telco_validate, telco_test
     
 
