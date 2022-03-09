@@ -42,6 +42,24 @@ def prep_titanic(titanic_df):
     return titanic_df_clean, titanic_train, titanic_validate, titanic_test
 
 
+def prep_alt_titanic(titanic_df):
+    '''
+    Takes in a pandas DataFrame of the Titanic dataset as acquired and returns a cleaned version of the DF, and train, validate, and test splits
+    Args: titanic_df, pandas DF with expected columns and feature names
+    Return: titanic_df_clean and splits of it (train, validate, and test) 
+    '''
+    titanic_df = acq.get_titanic_data()
+    titanic_df = titanic_df.drop_duplicates()
+    titanic_df = titanic_df.drop(columns= ['passenger_id', 'embarked', 'class', 'deck'])
+    titanic_df = titanic_df.fillna('Southampton')
+    titanic_dummy_df = pd.get_dummies(titanic_df[['sex', 'embark_town']], dummy_na=False, drop_first= [True, True])
+    titanic_df = pd.concat([titanic_df, titanic_dummy_df], axis=1)
+    alt_titanic_df_clean = titanic_df.drop(columns= ['sex', 'embark_town'])
+    alt_titanic_train, alt_titanic_test = train_test_split(alt_titanic_df_clean, train_size = 0.8, stratify= alt_titanic_df_clean.survived,
+        random_state= 302)
+    alt_titanic_train, alt_titanic_validate = train_test_split(alt_titanic_train, train_size = 0.7, stratify= alt_titanic_train.survived, random_state= 302)
+    return alt_titanic_df_clean, alt_titanic_train, alt_titanic_validate, alt_titanic_test
+
 def prep_telco(telco_df):
     '''
     Takes in a pandas DataFrame of Telco data and returns a clean and prepped DF (telco_df_clean) along with train, 
@@ -60,6 +78,8 @@ def prep_telco(telco_df):
     telco_train, telco_test = train_test_split(telco_df_clean, train_size = 0.8, stratify= telco_df_clean.churn_Yes, random_state= 302)
     telco_train, telco_validate =  train_test_split(telco_train, train_size= 0.7, stratify= telco_train.churn_Yes, random_state= 302)
     return telco_df_clean, telco_train, telco_validate, telco_test
+
+
     
 
 
